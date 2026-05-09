@@ -1,390 +1,282 @@
-# Malware Development & Implant Engineering Course
+<div align="center">
 
-A self-paced, GitHub-hosted course for motivated learners who are new to the niche.
+# Malware Development and Implant Engineering
 
-This course teaches how modern malware and implants work **under the hood**: how payloads execute, how code is loaded into memory, how process injection works, how stealth and anti-analysis mechanisms are engineered, how defenders observe these behaviors, and how full implant architectures are designed from loader to beacon to runtime concealment.
+### A safe, hands-on, self-paced course for learning Windows internals, malware research mechanics, implant architecture, and defensive interpretation in an isolated lab.
 
----
+**Build benign artifacts. Run them locally. Inspect what changes. Defend what the evidence proves.**
 
-## What This Course Covers
+[Start Module 00](modules/00-orientation/README.md) ·
+[Course Map](docs/course-map.md) ·
+[Lab Architecture](docs/lab-architecture.md) ·
+[Safety Boundaries](docs/legal-and-safety-boundaries.md)
 
-This course is designed to build a strong, layered understanding of:
-
-- Windows internals relevant to offensive tooling
-- Native development and low-level execution flow
-- PE files, memory layout, and loader behavior
-- Shellcode and payload execution fundamentals
-- Process injection and manual loading concepts
-- Static stealth and anti-analysis techniques
-- EDR visibility, telemetry, hooks, ETW, and AMSI
-- Advanced execution-path concepts such as native APIs, syscall-mediated paths, unhooking, and patchless approaches
-- Implant architecture, staging, configuration, and C2 design
-- Persistence, sideloading, and launch chains
-- Runtime stealth, sleep obfuscation, and in-memory survival
-- Capstone-level integration of a modern reference implant architecture
-
-The goal is not just to collect techniques. The goal is to understand **why** techniques exist, **how** they work internally, **what tradeoffs they introduce**, and **how defenders or analysts would reason about them**.
+</div>
 
 ---
 
-## Who This Course Is For
+> **Start Here**
+>
+> Begin with [Module 00 - Orientation, Safety, Lab Architecture, and Course Map](modules/00-orientation/README.md). This is not optional setup material. Module 00 builds the Windows analysis lab, installs the tools, creates the evidence workflow, and proves the build-run-inspect loop that every later lesson depends on.
 
-You do **not** need previous malware-development experience.
+## What This Course Is
 
-You **should** be comfortable with at least some of the following:
+`Malware Development and Implant Engineering` is a premium, GitHub-native course for learners who want to understand malware-like software behavior from first principles without turning the material into an operations guide.
 
-- general offensive-security concepts
-- command line usage
-- basic programming concepts
-- basic Windows usage
-- curiosity around how software behaves internally
+The course teaches the mechanics behind native Windows execution, PE files, process memory, loader behavior, payload forms, remote process interaction, telemetry, stealth claims, implant architecture, persistence tradeoffs, runtime state, and capstone design defense.
 
----
+The organizing idea is simple:
 
-## What Makes This Course Different
+> **Concepts become real when you can build a safe artifact, observe it, and explain what the evidence does and does not prove.**
 
-Many resources in this space are either:
-
-- too shallow and tool-centric
-- too fragmented and assumption-heavy
-- too focused on isolated tricks with no architectural context
-- too weak on defender visibility and telemetry reasoning
-
-This course is different.
-
-We treat implant engineering as a **systems problem**, not a collection of disconnected “bypasses.”  
-Throughout the course, we repeatedly examine topics through multiple lenses:
-
-- **operator viewpoint** — why a technique might be chosen
-- **Windows internals viewpoint** — what is happening under the hood
-- **defender viewpoint** — what telemetry or artifacts may be exposed
-- **reverse engineering viewpoint** — how an analyst might identify or reason about it
-- **software engineering viewpoint** — what complexity, maintenance burden, and fragility the design introduces
-
-The result is a course that is both more technically rigorous and more transferable to real-world research, detection, and engineering work.
+This is not a notes archive. It is a structured learning system with modules, lessons, labs, references, checkpoints, evidence templates, and a final capstone.
 
 ---
 
-## Learning Philosophy
+## What Makes It Different
 
-This course follows a **progressive, layered structure**.
+| Instead of... | This course teaches... |
+|---|---|
+| Technique-name memorization | Mechanism, state, evidence, and tradeoff reasoning |
+| Passive reading | Build-run-inspect labs using benign local artifacts |
+| Copy-paste code without context | Small controlled programs with interpretation and cleanup |
+| "Stealth" as mythology | Visibility, telemetry, assumptions, and validation limits |
+| Disconnected malware notes | A progressive path from Windows internals to capstone architecture |
+| Offensive-only framing | Defender, analyst, and reverse-engineering viewpoints throughout |
+| Unbounded dual-use recipes | Local-only, reversible, safety-scoped research exercises |
 
-We do not jump straight into advanced tradecraft without first building the mental models needed to understand it. Each module exists for a reason, and each one feeds the next.
-
-The broad learning flow is:
-
-1. build the Windows and native development foundation  
-2. understand how payloads and loaders work  
-3. understand how code reaches execution in remote processes  
-4. understand static stealth and anti-analysis  
-5. understand how defenders and security products observe behavior  
-6. study more advanced execution-path and telemetry-aware techniques  
-7. design implants as modular systems  
-8. examine persistence and launch chains  
-9. analyze runtime stealth and in-memory survival  
-10. integrate everything into a capstone implant architecture
-
-By the end of the course, you should be able to reason clearly about implant behavior from **first principles**, not just recognize names of techniques.
+> **Mental Model**
+>
+> The curriculum is not the list of techniques. The curriculum is the sequence of questions the learner learns to ask: what changed, where can I see it, what am I inferring, what would validate it, what remains visible, and how do I cleanly reset?
 
 ---
 
-## Course Outcomes
+## The Learning Loop
 
-By completing this course, you should be able to:
-
-- explain the Windows internals that matter most to malware and implant behavior
-- reason about memory protections, loader responsibilities, and execution flow
-- distinguish between different payload forms and execution models
-- compare multiple injection and loading families by tradeoff and detection surface
-- explain how static stealth differs from runtime stealth
-- understand the practical roles of AMSI, ETW, hooks, memory scanning, and telemetry pipelines
-- evaluate advanced execution-path ideas without turning them into mythology
-- design and diagram a modular implant architecture with clear boundaries
-- reason about staging, profiles, beacon loops, configuration, and transport design
-- compare persistence options by durability, visibility, and forensic residue
-- explain how runtime concealment changes memory-state visibility over time
-- defend architectural choices in a final capstone rather than merely assemble parts blindly
-
----
-
-## How the Course Is Structured
-
-The course is organized into **11 modules**:
-
-- **Module 0** — Orientation, Lab Architecture, and Course Map
-- **Module 1** — Windows Internals and Native Development Foundations
-- **Module 2** — PE Loading, Shellcode, and Payload Execution Fundamentals
-- **Module 3** — Code Injection, Remote Execution, and Manual Loading
-- **Module 4** — Static Stealth, Import Obfuscation, and Anti-Analysis Fundamentals
-- **Module 5** — Security Telemetry and Detection Surfaces
-- **Module 6** — Advanced Execution Paths: Native APIs, Syscalls, Unhooking, Patchless Concepts, and Threadless Patterns
-- **Module 7** — Implant Architecture, Staging, Profiles, and C2 Design
-- **Module 8** — Persistence, Sideloading, and Launch Chains
-- **Module 9** — Runtime Stealth, Sleep Obfuscation, and In-Memory Survival
-- **Module 10** — Full Implant Architecture and Capstone
-
-Each module is intended to include some combination of:
-
-- lesson notes
-- slide outlines
-- diagrams and concept visuals
-- guided demos
-- lab ideas or lab handouts
-- knowledge checks
-- instructor or author notes
-- analyst-view and defender-view reflections
-
----
-
-## Module Overview
-
-## Module 0 — Orientation, Lab Architecture, and Course Map
-
-This opening module establishes the course scope, expected learner profile, lab model, tooling assumptions, and the overall dependency chain across the curriculum.
-
-Topics include:
-
-- what “malware development” and “implant engineering” mean in this course
-- how the course is framed and why it is structured progressively
-- lab topology and safe research workflow
-- tooling overview: compiler, debugger, disassembler, VM workflow
-- how the capstone fits into the learning journey
-
-This module exists to make the rest of the course coherent from day one.
-
----
-
-## Module 1 — Windows Internals and Native Development Foundations
-
-This module builds the technical base the rest of the course depends on.
-
-Topics include:
-
-- processes, threads, handles, modules, and execution context
-- virtual memory, protections, and address-space reasoning
-- PE format anatomy and loader behavior
-- stacks, registers, calling conventions, and execution flow
-- Win32 API, Native API, and syscall boundary concepts
-- debugging and reversing small native programs
-
-If students do not internalize this module, the advanced material later will feel like memorization instead of understanding.
-
----
-
-## Module 2 — PE Loading, Shellcode, and Payload Execution Fundamentals
-
-This module teaches how executable logic is represented and how it reaches execution in memory.
-
-Topics include:
-
-- shellcode and position-independent code concepts
-- payload forms: raw buffers, PE-based payloads, reflective concepts
-- allocation, writing, protection changes, and control transfer
-- local execution models
-- encoding, encryption, hashing, and concealment basics
-- loader anatomy and why custom loaders exist
-
-This is where the student begins to understand the “shape” of malicious execution.
-
----
-
-## Module 3 — Code Injection, Remote Execution, and Manual Loading
-
-This module examines how code is introduced into other processes and how execution is transferred there.
-
-Topics include:
-
-- injection family taxonomy
-- remote memory manipulation concepts
-- new-thread, reused-thread, APC, and context-based execution concepts
-- hollowing-style and replacement-style models
-- module stomping and related ideas
-- manual mapping and reflective loading relationships
-- technique tradeoffs and artifact patterns
-
-The goal is not to memorize names. The goal is to understand the families, the mechanics, and the observable consequences.
-
----
-
-## Module 4 — Static Stealth, Import Obfuscation, and Anti-Analysis Fundamentals
-
-This module focuses on how binaries change their visible shape and how they frustrate analysts before or during early execution.
-
-Topics include:
-
-- static triage signals such as strings, imports, and metadata
-- delayed resolution and custom import logic
-- API hashing and string concealment concepts
-- anti-debugging
-- anti-VM and anti-sandbox logic
-- packers, entropy, metadata manipulation, and static stealth tradeoffs
-
-This module teaches the first real layer of stealth while also showing where stealth commonly fails.
-
----
-
-## Module 5 — Security Telemetry and Detection Surfaces
-
-This module explains what defenders and endpoint security products actually observe.
-
-Topics include:
-
-- practical EDR architecture and telemetry pipelines
-- event sources, correlation, and behavioral analytics
-- ETW and AMSI in context
-- user-mode hooks and their role
-- memory scanning and inspection concepts
-- technique-to-telemetry mapping
-- why bypassing one visibility layer does not equal invisibility
-
-This module is essential because advanced evasion only makes sense when students understand what they are trying to alter, reduce, or avoid.
-
----
-
-## Module 6 — Advanced Execution Paths: Native APIs, Syscalls, Unhooking, Patchless Concepts, and Threadless Patterns
-
-This module explores more advanced execution-path tradecraft and the engineering tradeoffs involved.
-
-Topics include:
-
-- Native API usage patterns
-- syscall-mediated execution concepts
-- unhooking goals and limitations
-- patchless approaches at a conceptual level
-- callback and alternative control-transfer patterns
-- threadless execution concepts
-- why advanced techniques often introduce brittleness, maintenance cost, and debugging pain
-
-This module is about disciplined reasoning, not technique worship.
-
----
-
-## Module 7 — Implant Architecture, Staging, Profiles, and C2 Design
-
-This module is where the course shifts from isolated technique study to coherent implant-system design.
-
-Topics include:
-
-- loader vs stager vs stage vs implant
-- modular architecture and component boundaries
-- encrypted configuration concepts
-- tasking loops and beacon logic
-- transport abstraction and communication profile design
-- sleep, jitter, cadence, and OPSEC tradeoffs
-- interface design, recoverability, and architecture clarity
-
-This is where students begin thinking like implant engineers instead of just students of execution tricks.
-
----
-
-## Module 8 — Persistence, Sideloading, and Launch Chains
-
-This module examines how an implant regains execution or survives restart conditions.
-
-Topics include:
-
-- persistence taxonomy
-- launch persistence vs runtime stealth
-- sideloading and search-order hijacking concepts
-- load-chain reasoning
-- registry, task, service, and WMI-style foothold concepts
-- durability vs noise vs forensic residue
-- when persistence is worth the cost and when it is not
-
-This module treats persistence as an architectural and operational choice, not a checkbox.
-
----
-
-## Module 9 — Runtime Stealth, Sleep Obfuscation, and In-Memory Survival
-
-This module focuses on what happens while an implant is already running in memory, especially during idle periods.
-
-Topics include:
-
-- runtime visibility and dwell-time exposure
-- active-state vs idle-state reasoning
-- sleep obfuscation families at a conceptual level
-- region, code, and data concealment concepts
-- memory-state transitions over time
-- behavioral camouflage
-- what defenders and analysts still observe despite concealment
-
-This module helps students reason about implants as living systems rather than one-shot payloads.
-
----
-
-## Module 10 — Full Implant Architecture and Capstone
-
-The final module integrates the full course into one coherent design and evaluation process.
-
-Topics include:
-
-- reference implant architecture
-- milestone planning and phased integration
-- architectural tradeoff defense
-- functional validation and observability review
-- analyst-side review of your own design
-- optional branches such as persistence or more advanced runtime behavior
-- capstone synthesis across all prior modules
-
-The capstone is intended to demonstrate understanding, not just assembly.
-
----
-
-## Teaching Approach
-
-Across the course, each major topic should repeatedly answer questions like:
-
-- What is happening internally?
-- Why would an operator choose this?
-- What would a defender or analyst observe?
-- What complexity or fragility does this introduce?
-- Where does this fit in a larger implant architecture?
-
-That repeated framing is intentional. It helps students develop durable understanding instead of shallow familiarity.
-
----
-
-## Expected Repository Contents
-
-This repository is intended to function as a structured self-study course and reference system.
-
-Typical contents may include:
-
-- module overviews
-- lesson markdown files
-- diagram source files
-- lab handouts
-- screenshots and visuals
-- capstone planning docs
-- shared glossary and terminology notes
-- course map and dependency documentation
-
-A typical layout may look something like:
+Every technical module reinforces the same core workflow:
 
 ```text
-.
+Frame the concept
+  -> build or prepare a benign artifact
+  -> run or simulate it in the isolated lab
+  -> inspect file, process, memory, debugger, or telemetry state
+  -> separate observation from inference
+  -> clean up and reset
+  -> carry the evidence into the checkpoint
+```
+
+| Course habit | What the learner practices |
+|---|---|
+| Build | Compile or prepare small benign programs, DLLs, configs, diagrams, or worksheets |
+| Run | Execute only inside the learner-owned local lab or use an explicitly labeled simulation |
+| Inspect | Use PE tools, debuggers, process tools, memory views, logs, and architecture reviews |
+| Interpret | Explain direct observations separately from claims and assumptions |
+| Defend | Write evidence notes from both an engineering and analyst perspective |
+| Reset | Stop test programs, remove temporary artifacts, revert snapshots, and document cleanup |
+
+---
+
+## Who This Is For
+
+This course is for learners who want to:
+
+- understand Windows internals through hands-on native development
+- learn malware development concepts in a controlled research lab
+- build strong PE, loader, process, memory, and debugger literacy
+- reason about payloads, loading, telemetry, and implant architecture without mysticism
+- connect offensive engineering concepts to defender and analyst visibility
+- practice writing evidence-backed technical explanations
+
+You should be comfortable with basic programming and command-line work. You do not need previous malware development experience.
+
+This course is not for learners looking for turnkey intrusion tooling, real-world targeting playbooks, credential theft workflows, destructive payloads, or production evasion recipes.
+
+---
+
+## Safety Position
+
+This repository teaches dual-use subject matter with strict boundaries.
+
+All hands-on work must be:
+
+- learner-owned
+- local-only or isolated
+- reversible
+- snapshot-backed
+- based on benign test programs, toy targets, inert artifacts, or simulations
+- documented with cleanup notes
+- explicit about what is observed versus inferred
+
+This course does not teach unauthorized deployment, public infrastructure operations, credential theft, destructive behavior, persistence on non-lab systems, or bypass validation against third-party products outside a controlled lab.
+
+Read [Legal and Safety Boundaries](docs/legal-and-safety-boundaries.md) before starting the technical path.
+
+---
+
+## Course Journey
+
+The course is organized as a progression. Each phase gives the learner a new layer of understanding and a new type of evidence to preserve.
+
+| Phase | Modules | What the learner builds |
+|---|---|---|
+| **I. Lab and systems foundation** | 00-01 | Isolated lab, toolchain, benign Windows programs, PE and debugger evidence |
+| **II. Execution mechanics** | 02-03 | Payload-form maps, local execution evidence, remote-process interaction models |
+| **III. Visibility and detection reasoning** | 04-06 | Static triage reports, telemetry matrices, advanced execution tradeoff reviews |
+| **IV. Implant-system design** | 07-09 | Local-only architecture diagrams, beacon simulations, lifecycle and runtime-state reviews |
+| **V. Capstone synthesis** | 10 | Final architecture, evidence pack, telemetry review, safety review, and design defense |
+
+<details>
+<summary><strong>Why this order?</strong></summary>
+
+Advanced malware development topics become unsafe and confusing when learners skip the foundations. This course starts with lab discipline, native Windows development, PE files, memory, loader behavior, and debugging before moving into payloads, remote-process concepts, telemetry, advanced execution paths, implant architecture, persistence, runtime state, and capstone synthesis.
+
+The point is not to race toward advanced labels. The point is to understand what the labels mean, what state changes underneath them, and what an analyst can still observe.
+
+</details>
+
+---
+
+## Course Roadmap
+
+### Phase I - Lab And Systems Foundation
+
+| Module | Focus | Checkpoint |
+|---|---|---|
+| [00. Orientation, Safety, Lab Architecture, and Course Map](modules/00-orientation/README.md) | Build the reusable Windows research lab, install tools, create snapshots, set up the `maldev-lab/` workspace, and prove build-run-inspect works | Lab readiness gate |
+| [01. Windows Internals and Native Development Foundations](modules/01-windows-foundations/README.md) | Native C, Windows processes, memory, PE files, loader behavior, and debugger essentials | Source-to-runtime evidence pack |
+
+### Phase II - Execution Mechanics
+
+| Module | Focus | Checkpoint |
+|---|---|---|
+| [02. PE Loading, Shellcode, and Payload Execution Fundamentals](modules/02-payload-execution/README.md) | Payload forms, local execution lifecycle, staging, storage, transformation, and observation | Payload lifecycle evidence |
+| [03. Code Injection, Remote Execution, and Manual Loading](modules/03-injection-loading/README.md) | Remote process readiness, memory lifecycle, execution triggers, loading families, and tradeoffs | Remote execution family comparison |
+
+### Phase III - Visibility And Detection Reasoning
+
+| Module | Focus | Checkpoint |
+|---|---|---|
+| [04. Static Stealth, Import Obfuscation, and Anti-Analysis Fundamentals](modules/04-static-stealth-anti-analysis/README.md) | Static triage, representation changes, import visibility, anti-analysis assumptions, and analyst reconstruction | Before/after static triage report |
+| [05. Security Telemetry and Detection Surfaces](modules/05-telemetry-detection-surfaces/README.md) | Endpoint visibility, events, ETW, AMSI, memory scanning, behavioral correlation, and evidence quality | Technique-to-telemetry matrix |
+| [06. Advanced Execution Paths, Syscalls, Unhooking, Patchless Concepts, and Threadless Patterns](modules/06-advanced-execution-evasion/README.md) | API layers, hook-aware reasoning, dispatch alternatives, fragility, portability, and defender view | Advanced execution tradeoff review |
+
+### Phase IV - Implant-System Design
+
+| Module | Focus | Checkpoint |
+|---|---|---|
+| [07. Implant Architecture, Staging, Profiles, and C2 Design](modules/07-implant-architecture-c2/README.md) | Local-only implant architecture, component boundaries, task schema, config, timing, and safe beacon simulation | Local-only beacon architecture |
+| [08. Persistence, Sideloading, and Launch Chains](modules/08-persistence-launch-chains/README.md) | Persistence as lifecycle design, launch chains, sideloading concepts, residue, reversibility, and restraint | Persistence and launch-chain review |
+| [09. Runtime Stealth, Sleep Obfuscation, and In-Memory Survival](modules/09-runtime-stealth/README.md) | Runtime threat model, active/idle state, memory visibility, timing, state transitions, and reconstruction limits | Runtime state timeline |
+
+### Phase V - Capstone Synthesis
+
+| Module | Focus | Checkpoint |
+|---|---|---|
+| [10. Full Implant Architecture and Capstone Project](modules/10-capstone/README.md) | Controlled local-only architecture, milestone evidence, telemetry review, safety review, and final defense | Capstone evidence pack |
+
+---
+
+## What You Will Be Able To Do
+
+By the end of the course, a learner should be able to:
+
+- build and inspect benign native Windows programs
+- explain how source code becomes a PE file and runtime process state
+- inspect PE headers, imports, sections, modules, memory regions, threads, and debugger state
+- compare payload forms and loading models by assumptions and constraints
+- reason about remote-process interaction families without treating them as magic
+- evaluate static stealth claims with before/after evidence
+- map behaviors to telemetry and detection surfaces
+- explain advanced execution paths as tradeoffs, not invisibility guarantees
+- design a local-only implant architecture with clear component boundaries
+- evaluate persistence and runtime stealth as lifecycle decisions with residue and cleanup cost
+- produce a capstone evidence pack with diagrams, lab notes, telemetry reasoning, safety review, and design defense
+
+---
+
+## Course Materials
+
+| Resource | Use it for |
+|---|---|
+| [Course Map](docs/course-map.md) | Module order, dependency flow, and progress gates |
+| [Lab Architecture](docs/lab-architecture.md) | VM model, network isolation, snapshots, workspace structure, and reset workflow |
+| [Tooling and VM Setup](docs/tooling-and-vm-setup.md) | Compiler, debugger, PE tools, process tools, and telemetry setup |
+| [Legal and Safety Boundaries](docs/legal-and-safety-boundaries.md) | Allowed and prohibited use, lab-only rules, and dual-use guardrails |
+| [Evidence Notebook Template](docs/evidence-notebook-template.md) | Standard notes for observations, inferences, validation, and cleanup |
+| [Lab Safety Checklist](docs/lab-safety-checklist.md) | Pre-lab and post-lab safety checks |
+| [Glossary](shared/terminology/glossary.md) | Course vocabulary and working definitions |
+| [Observation Checklist](shared/telemetry-checklists/observation-inference-validation.md) | Evidence discipline for labs and checkpoints |
+
+---
+
+## How To Use This Repository
+
+### First pass
+
+1. Start with [Module 00](modules/00-orientation/README.md).
+2. Build the isolated Windows lab and `maldev-lab/` workspace.
+3. Complete the benign smoke test before entering Module 01.
+4. Work through modules in order.
+5. Complete every lesson artifact, lab, and checkpoint.
+6. Keep evidence as you go.
+
+### Returning as a reference
+
+- Use the module READMEs to re-enter a topic.
+- Use reference cheat sheets during labs.
+- Use checkpoints to test whether you still understand the module.
+- Use deep dives only after the core path is clear.
+
+---
+
+## Repository Layout
+
+```text
+maldev/
 ├── README.md
 ├── docs/
 │   ├── course-map.md
-│   ├── prerequisites.md
+│   ├── legal-and-safety-boundaries.md
 │   ├── lab-architecture.md
-│   ├── tooling-setup.md
-│   └── glossary.md
+│   ├── tooling-and-vm-setup.md
+│   ├── evidence-notebook-template.md
+│   ├── authoring-standards.md
+│   └── lab-safety-checklist.md
 ├── modules/
 │   ├── 00-orientation/
 │   ├── 01-windows-foundations/
-│   ├── 02-payload-execution/
-│   ├── 03-injection-loading/
-│   ├── 04-static-stealth-anti-analysis/
-│   ├── 05-telemetry-detection-surfaces/
-│   ├── 06-advanced-execution-evasion/
-│   ├── 07-implant-architecture-c2/
-│   ├── 08-persistence-launch-chains/
-│   ├── 09-runtime-stealth/
-│   └── 10-capstone/
-└── shared/
-    ├── diagrams/
-    ├── terminology/
-    ├── worksheets/
-    └── analyst-viewpoints/
+│   └── ...
+├── shared/
+│   ├── lab-templates/
+│   ├── telemetry-checklists/
+│   ├── terminology/
+│   └── worksheets/
+└── assets/
+```
+
+Each module is designed to contain:
+
+- a module landing page
+- ordered lessons
+- at least one lab
+- a checkpoint
+- a reference cheat sheet
+- optional deep dives
+
+---
+
+## The First Milestone
+
+Your first real goal is not to learn injection, stealth, or C2.
+
+Your first goal is to prove that your lab can safely support the rest of the course:
+
+| Requirement | Where to complete it |
+|---|---|
+| Understand the course boundary | [Module 00](modules/00-orientation/README.md) |
+| Build the isolated lab | [Lab Architecture](docs/lab-architecture.md) |
+| Install and verify tools | [Tooling and VM Setup](docs/tooling-and-vm-setup.md) |
+| Create the evidence workflow | [Evidence Notebook Template](docs/evidence-notebook-template.md) |
+| Compile and inspect a benign program | [Module 00 Readiness Lab](modules/00-orientation/labs/module-00-lab-01-lab-installation-tooling-and-readiness-gate.md) |
+
+Once that is complete, move into [Module 01 - Windows Internals and Native Development Foundations](modules/01-windows-foundations/README.md).
